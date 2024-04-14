@@ -1,5 +1,4 @@
-import { User } from 'src/user/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Attestation {
@@ -15,6 +14,18 @@ export class Attestation {
   @Column({ type: 'date' })
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.attestations)
-  soliciters: User;
+  @Column()
+  studentName: string;
+
+  @Column()
+  studyForm: string;
+
+  @Column()
+  studyProgram: string;
+
+  @Column()
+  studyYear: string;
+
+  @Column()
+  gender: string;
 }
