@@ -7,6 +7,7 @@ import { AttestationModule } from './attestation/attestation.module';
 import { VariableModule } from './variable/variable.module';
 import { GoogleSheetsModule } from './google-sheets/google-sheets.module';
 import { ConfigModule } from '@nestjs/config';
+import { GoogleAuthModule } from './google-auth/google-auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ConfigModule } from '@nestjs/config';
     AttestationModule,
     VariableModule,
     GoogleSheetsModule,
+    GoogleAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
