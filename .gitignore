@@ -1,6 +1,5 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# See h:tps://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-constants.ts
 *.sqlite
 
 # frontend 
