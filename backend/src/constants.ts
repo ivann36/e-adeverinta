@@ -1,4 +1,4 @@
 export const constants = {
-  defaultSheetStartIndex: 2,
+  defaultSheetStartIndex: 1,
   startIndexName: 'startIndex',
 };

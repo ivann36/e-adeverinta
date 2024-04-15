@@ -12,10 +12,21 @@ export class VariableService {
   ) {}
 
   async resetLastEntry(): Promise<void> {
+    await this.setLastEntryNumber(constants.defaultSheetStartIndex);
+  }
+
+  async getLastEntryNumber(): Promise<number> {
     const variable = await this.variableRepository.findOneBy({
       name: constants.startIndexName,
     });
-    variable.value = constants.defaultSheetStartIndex;
+    return variable.value;
+  }
+
+  async setLastEntryNumber(num: number): Promise<void> {
+    const variable = await this.variableRepository.findOneBy({
+      name: constants.startIndexName,
+    });
+    variable.value = num;
     await this.variableRepository.save(variable);
   }
 }

@@ -6,5 +6,6 @@ import { Variable } from './variable.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Variable])],
   providers: [VariableService],
+  exports: [VariableService],
 })
 export class VariableModule {}

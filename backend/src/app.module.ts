@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AttestationModule } from './attestation/attestation.module';
 import { VariableModule } from './variable/variable.module';
+import { GoogleSheetsModule } from './google-sheets/google-sheets.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,9 +16,13 @@ import { VariableModule } from './variable/variable.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UserModule,
     AttestationModule,
     VariableModule,
+    GoogleSheetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
