@@ -8,11 +8,11 @@ export class Attestation {
   @Column()
   purpose: string;
 
-  @Column()
+  @Column({ nullable: true })
   registrationNumber: string;
 
-  @Column({ type: 'date' })
-  date: Date;
+  @Column({ type: 'date', nullable: true })
+  registrationDate: Date;
 
   @Column()
   studentName: string;
@@ -28,4 +28,7 @@ export class Attestation {
 
   @Column()
   gender: string;
+
+  @Column()
+  email: string;
 }
