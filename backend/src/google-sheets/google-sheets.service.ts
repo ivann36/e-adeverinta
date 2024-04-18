@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google, sheets_v4 } from 'googleapis';
 import { JWT } from 'google-auth-library';
 import { VariableService } from 'src/variable/variable.service';
 import { AttestationService } from 'src/attestation/attestation.service';
 import { Attestation } from 'src/attestation/attestation.entity';
+import { UserService } from 'src/user/user.service';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 
@@ -17,6 +18,7 @@ export class GoogleSheetsService {
     private configService: ConfigService,
     private variableService: VariableService,
     private attestationService: AttestationService,
+    private userService: UserService,
   ) {
     this.client = new google.auth.JWT({
       email: this.configService.get('CLIENT_EMAIL'),
@@ -31,6 +33,10 @@ export class GoogleSheetsService {
           version: 'v4',
           auth: this.client,
         });
+      } else {
+        console.error('Error connecting to google spreadsheet!');
+        console.assert('Problem may be related to wrong local time!');
+        console.log(error);
       }
     });
     this.spreadsheetId = configService.get('SPREADSHEET_ID');
@@ -39,30 +45,34 @@ export class GoogleSheetsService {
     const lastEntryNumber = await this.variableService.getLastEntryNumber();
     const tableSizeResponse = await this.sheets.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
-      range: 'Form Responses 1!K2',
+      range: 'Form Responses 1!F2',
     });
+    console.log(`Table size response: ${tableSizeResponse.data.values}`);
     const tableSize = Number(tableSizeResponse.data.values[0][0]);
     if (lastEntryNumber == tableSize) {
       return [];
     }
     const entries = await this.sheets.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
-      range: `Form Responses 1!A${lastEntryNumber + 1}:H${tableSize}`,
+      range: `Form Responses 1!A${lastEntryNumber + 1}:C${tableSize}`,
     });
     const attestations: Array<Attestation> = [];
-    console.log(lastEntryNumber, tableSize, entries.data.values);
-    entries.data.values.forEach((attestation) => {
-      const newAttestation = new Attestation();
-      newAttestation.email = attestation[1];
-      newAttestation.studentName = attestation[2];
-      newAttestation.studyYear = attestation[3];
-      newAttestation.studyProgram = attestation[4];
-      newAttestation.studyForm = attestation[5];
-      newAttestation.purpose = attestation[6];
-      newAttestation.gender = attestation[7];
-      attestations.push(newAttestation);
-    });
 
+    console.log(lastEntryNumber, tableSize, entries.data.values);
+
+    for (const attestation of entries.data.values) {
+      const user = await this.userService.getUserByEmail(attestation[1]);
+      if (user) {
+        const newAttestation = new Attestation();
+        newAttestation.purpose = attestation[2];
+        attestations.push(newAttestation);
+      } else {
+        throw new HttpException(
+          'Student email not found!',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
     this.attestationService.addNewEntries(attestations);
     this.variableService.setLastEntryNumber(tableSize);
     return entries.data.values;

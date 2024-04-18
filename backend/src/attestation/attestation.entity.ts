@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Attestation {
@@ -8,27 +9,12 @@ export class Attestation {
   @Column()
   purpose: string;
 
-  @Column({ nullable: true })
+  @Column()
   registrationNumber: string;
 
-  @Column({ type: 'date', nullable: true })
-  registrationDate: Date;
+  @Column({ type: 'date' })
+  date: Date;
 
-  @Column()
-  studentName: string;
-
-  @Column()
-  studyForm: string;
-
-  @Column()
-  studyProgram: string;
-
-  @Column()
-  studyYear: string;
-
-  @Column()
-  gender: string;
-
-  @Column()
-  email: string;
+  @ManyToOne(() => User, (user) => user.attestations)
+  soliciters: User;
 }
