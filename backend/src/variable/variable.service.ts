@@ -23,9 +23,13 @@ export class VariableService {
   }
 
   async setLastEntryNumber(num: number): Promise<void> {
-    const variable = await this.variableRepository.findOneBy({
+    let variable = await this.variableRepository.findOneBy({
       name: constants.startIndexName,
     });
+    if (!variable) {
+      variable = new Variable();
+      variable.name = constants.startIndexName;
+    }
     variable.value = num;
     await this.variableRepository.save(variable);
   }
