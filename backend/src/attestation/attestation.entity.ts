@@ -1,4 +1,4 @@
-import { User } from 'src/user/user.entity';
+import { Student } from 'src/students/student.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -15,6 +15,6 @@ export class Attestation {
   @Column({ type: 'date' })
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.attestations)
-  soliciters: User;
+  @ManyToOne(() => Student, (Student) => Student.attestations)
+  soliciters: Student;
 }

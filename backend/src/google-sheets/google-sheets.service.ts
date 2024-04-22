@@ -5,7 +5,7 @@ import { JWT } from 'google-auth-library';
 import { VariableService } from 'src/variable/variable.service';
 import { AttestationService } from 'src/attestation/attestation.service';
 import { Attestation } from 'src/attestation/attestation.entity';
-import { UserService } from 'src/user/user.service';
+import { StudentService } from 'src/students/student.service';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 
@@ -18,7 +18,7 @@ export class GoogleSheetsService {
     private configService: ConfigService,
     private variableService: VariableService,
     private attestationService: AttestationService,
-    private userService: UserService,
+    private studentService: StudentService,
   ) {
     this.client = new google.auth.JWT({
       email: this.configService.get('CLIENT_EMAIL'),
@@ -61,8 +61,10 @@ export class GoogleSheetsService {
     console.log(lastEntryNumber, tableSize, entries.data.values);
 
     for (const attestation of entries.data.values) {
-      const user = await this.userService.getUserByEmail(attestation[1]);
-      if (user) {
+      const Student = await this.studentService.getStudentByEmail(
+        attestation[1],
+      );
+      if (Student) {
         const newAttestation = new Attestation();
         newAttestation.purpose = attestation[2];
         attestations.push(newAttestation);

@@ -2,7 +2,7 @@ import { Attestation } from 'src/attestation/attestation.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
-export class User {
+export class Student {
   @PrimaryGeneratedColumn()
   id: number;
 
