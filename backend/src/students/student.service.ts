@@ -12,4 +12,8 @@ export class StudentService {
   async getStudentByEmail(email: string): Promise<Student | null> {
     return await this.StudentRepository.findOneBy({ email: email });
   }
+
+  async getAllStudents(): Promise<Student[]> {
+    return await this.StudentRepository.find();
+  }
 }

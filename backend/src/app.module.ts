@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GoogleAuthModule } from './google-auth/google-auth.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
+import { SecretaryModule } from './secretary/secretary.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
     GoogleAuthModule,
     AdminModule,
     AuthModule,
+    SecretaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

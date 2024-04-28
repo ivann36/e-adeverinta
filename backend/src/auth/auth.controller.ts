@@ -6,15 +6,13 @@ import {
   HttpStatus,
   UseGuards,
   Get,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { RefreshTokenDto, SignInDto } from './dtos.dto';
 
-class SignInDto {
-  username: string;
-  password: string;
-}
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -22,12 +20,21 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   signIn(@Body() signInDto: SignInDto) {
-    console.log(signInDto.username, signInDto.password);
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
-  @Get('profile')
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    const newAccessToken = await this.authService.refreshAccessToken(
+      refreshTokenDto.token,
+    );
+    return newAccessToken;
+  }
+
   @UseGuards(AuthGuard)
-  getProfile(@Req() req) {
-    return req.user;
+  @Get('test')
+  async test() {
+    return { test: 'test' };
   }
 }
