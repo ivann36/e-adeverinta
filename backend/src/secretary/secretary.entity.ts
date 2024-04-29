@@ -16,4 +16,7 @@ export class Secretary {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
+
+  @Column()
+  refreshToken: string;
 }

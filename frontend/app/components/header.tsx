@@ -37,7 +37,7 @@ export const Header = () => {
               </button>
               <div className={styles.dropdownContent}>
                 <Link href="/login/admin">Admin</Link>
-                <Link href="/link2">Secretary</Link>
+                <Link href="/google-redirect">Secretary</Link>
               </div>
             </div>
         }
