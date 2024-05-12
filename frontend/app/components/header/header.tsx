@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import Link from 'next/link';
-import { useLoginStore } from '../utils/zustand';
+import { useLoginStore } from '../../utils/zustand';
 
 export const Header = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);

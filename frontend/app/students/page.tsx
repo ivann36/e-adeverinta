@@ -3,17 +3,27 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import Link from 'next/link';
 import { Student } from '../entities/student';
-import { useRouter } from 'next/navigation';
+import { Pagination } from '../components/pagination/pagination';
 
 const ListStudents: React.FC = () => {
   const [students, setStudents] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Fetch students from your API
   useEffect(() => {
-    fetch('api/student/all')
+    fetch(`/api/student/all?limit=${itemsPerPage}&offset=${(page-1) * itemsPerPage}`)
       .then(response => response.json())
-      .then(data => setStudents(data));
-  }, [students]);
+      .then(data => {
+        setStudents(data.students)
+        setTotalPages(data.totalPages)
+      });
+  }, [page, itemsPerPage]);
+
+  const onPageChange = async (page: number) => {
+    setPage(page);
+  }
 
   const onEdit = async (student: Student) => {
     if (!student.id) return console.error('No id provided');
@@ -32,7 +42,6 @@ const ListStudents: React.FC = () => {
     // fetch(`/api/student/${id}`, {
     //   method: 'DELETE',
     // })
-    setStudents([])
   }
 
   return (
@@ -76,6 +85,11 @@ const ListStudents: React.FC = () => {
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        itemsPerPage={itemsPerPage}
+        onPageChange={onPageChange} />
     </div>
   );
 };

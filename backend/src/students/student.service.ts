@@ -8,7 +8,7 @@ export class StudentService {
   constructor(
     @InjectRepository(Student)
     private StudentRepository: Repository<Student>,
-  ) {}
+  ) { }
 
   async getStudentById(id: number): Promise<Student | null> {
     return await this.StudentRepository.findOneBy({ id: id });
@@ -17,8 +17,13 @@ export class StudentService {
     return await this.StudentRepository.findOneBy({ email: email });
   }
 
-  async getAllStudents(): Promise<Student[]> {
-    return await this.StudentRepository.find();
+  async getAllStudents(limit: number, offset: number): Promise<{ students: Student[], totalPages: number }> {
+    const [students, total] = await this.StudentRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+    const totalPages = Math.ceil(total / limit);
+    return { students, totalPages };
   }
 
   async createStudent(studentData: Partial<Student>): Promise<Student> {

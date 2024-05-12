@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { StudentDto } from './student.dto';
@@ -15,8 +16,8 @@ export class StudentController {
   constructor(private studentService: StudentService) {}
 
   @Get('all')
-  async getAll() {
-    return await this.studentService.getAllStudents();
+  async getAll(@Query('limit') limit: number, @Query('offset') offset: number) {
+    return await this.studentService.getAllStudents(limit, offset);
   }
 
   @Get(':id')
