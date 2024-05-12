@@ -13,7 +13,7 @@ const ListStudents: React.FC = () => {
 
   // Fetch students from your API
   useEffect(() => {
-    fetch(`/api/student/all?limit=${itemsPerPage}&offset=${(page-1) * itemsPerPage}`)
+    fetch(`/api/student/all?limit=${itemsPerPage}&offset=${(page - 1) * itemsPerPage}`)
       .then(response => response.json())
       .then(data => {
         setStudents(data.students)
@@ -39,9 +39,11 @@ const ListStudents: React.FC = () => {
   const onDelete = (id?: number) => {
     console.log(id)
     if (!id) return console.error('No id provided');
-    // fetch(`/api/student/${id}`, {
-    //   method: 'DELETE',
-    // })
+    fetch(`/api/student/${id}`, {
+      method: 'DELETE',
+    }).then(() => {
+      setStudents(students.filter((student: Student) => student.id !== id))
+    })
   }
 
   return (
