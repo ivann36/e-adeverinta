@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { Student } from '../../entities/student';
 import styles from './styles.module.css';
+import { jwtFetch } from '@/app/utils/jwtFetch';
 
 const CreateStudent: React.FC = () => {
   const router = useRouter()
@@ -22,13 +23,12 @@ const CreateStudent: React.FC = () => {
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Create student data in your API
-    const response = await fetch(`/api/student`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(student)
-    })
+    const response = await jwtFetch(
+      {
+        url: `/api/student`,
+        method: 'POST',
+        body: student
+      })
     if (response.ok) {
       router.push('/students')
     }

@@ -11,7 +11,7 @@ export class AuthService {
     private usersService: AdminService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   async signIn(
     username: string,
@@ -46,11 +46,18 @@ export class AuthService {
       if (!isValidRefreshToken) {
         throw new UnauthorizedException();
       }
+      const newRefreshToken = await this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+      });
+
+      await this.usersService.storeRefreshToken(payload.username, newRefreshToken);
+
       return {
         access_token: await this.jwtService.signAsync({
           sub: payload.sub,
           username: payload.username,
         }),
+        refresh_token: newRefreshToken,
       };
     } catch (error) {
       console.log(error);

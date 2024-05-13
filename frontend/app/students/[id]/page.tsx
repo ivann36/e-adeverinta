@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation'
 import { Student } from '../../entities/student';
 import styles from './styles.module.css';
+import { jwtFetch } from '@/app/utils/jwtFetch';
 
 const EditStudent: React.FC = () => {
   const router = useRouter()
@@ -11,7 +12,7 @@ const EditStudent: React.FC = () => {
 
   // Fetch student data from your API
   useEffect(() => {
-    fetch(`/api/student/${params.id}`)
+    jwtFetch({ url: `/api/student/${params.id}`, method: 'GET' })
       .then(response => response.json())
       .then(data => setStudent(data));
   }, [params]);
@@ -19,12 +20,11 @@ const EditStudent: React.FC = () => {
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Update student data in your API
-    const response = await fetch(`/api/student/${params.id}`, {
+    if (!student) return console.error('No student data');
+    const response = await jwtFetch({
+      url: `/api/student/${params.id}`,
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(student)
+      body: student
     })
     if (response.ok) {
       router.push('/students')
@@ -37,11 +37,7 @@ const EditStudent: React.FC = () => {
 
   return (
     <form className={styles.editStudentContainer} onSubmit={onSubmit}>
-      <label className={styles.formLabel} >
-        ID:
-        <input className={styles.formInput} type="number" value={student.id}
-          onChange={e => setStudent({ ...student, id: Number(e.target.value) })} />
-      </label>
+
       <label className={styles.formLabel} >
         First Name:
         <input className={styles.formInput} type="text" value={student.firstName}
@@ -90,7 +86,7 @@ const EditStudent: React.FC = () => {
       <label className={styles.formLabel} >
         Financiation:
         <input className={styles.formInput} type="number" value={student.financiation}
-          onChange={e => setStudent({ ...student, financiation: Number(e.target.value) })} />
+          onChange={e => setStudent({ ...student, financiation: e.target.value })} />
       </label>
       <button className={styles.submitButton} type="submit">Update</button>
     </form>);

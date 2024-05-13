@@ -4,6 +4,7 @@ import styles from './styles.module.css';
 import Link from 'next/link';
 import { Student } from '../entities/student';
 import { Pagination } from '../components/pagination/pagination';
+import { jwtFetch } from '../utils/jwtFetch';
 
 const ListStudents: React.FC = () => {
   const [students, setStudents] = useState([]);
@@ -13,33 +14,32 @@ const ListStudents: React.FC = () => {
 
   // Fetch students from your API
   useEffect(() => {
-    fetch(`/api/student/all?limit=${itemsPerPage}&offset=${(page - 1) * itemsPerPage}`)
-      .then(response => response.json())
-      .then(data => {
-        setStudents(data.students)
-        setTotalPages(data.totalPages)
-      });
+    jwtFetch({
+      url: `/api/student/all?limit=${itemsPerPage}&offset=${(page - 1) * itemsPerPage}`,
+      method: 'GET',
+    }
+    )
+      .then(async response => {
+        const data = await response.json()
+        console.log(data)
+        if (!response.ok) console.error('Error fetching data');
+        else {
+          setStudents(data.students)
+          setTotalPages(data.totalPages)
+        }
+      })
+      .catch((error) => console.error(error));
   }, [page, itemsPerPage]);
 
   const onPageChange = async (page: number) => {
     setPage(page);
   }
 
-  const onEdit = async (student: Student) => {
-    if (!student.id) return console.error('No id provided');
-    const response = await fetch(`/api/student/${student.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(student)
-    })
-  }
-
   const onDelete = (id?: number) => {
     console.log(id)
     if (!id) return console.error('No id provided');
-    fetch(`/api/student/${id}`, {
+    jwtFetch({
+      url: `/api/student/${id}`,
       method: 'DELETE',
     }).then(() => {
       setStudents(students.filter((student: Student) => student.id !== id))
@@ -80,7 +80,7 @@ const ListStudents: React.FC = () => {
               <td>{student.financiation}</td>
               <td>{student.gender}</td>
               <td>
-                <Link href={`/students/${student.id}`} className={styles.button} onClick={() => onEdit(student)}>Edit</Link>
+                <Link href={`/students/${student.id}`} className={styles.button}>Edit</Link>
                 <button className={styles.button} onClick={() => onDelete(student.id)}>Delete</button>
               </td>
             </tr>
@@ -92,7 +92,7 @@ const ListStudents: React.FC = () => {
         totalPages={totalPages}
         itemsPerPage={itemsPerPage}
         onPageChange={onPageChange} />
-    </div>
+    </div >
   );
 };
 

@@ -10,6 +10,7 @@ const LoginPage = () => {
     if (refresh && access) {
       localStorage.setItem('access_token', access)
       localStorage.setItem('refresh_token', refresh)
+      localStorage.setItem('role', 'secretary')
     }
     redirect('/')
   }, [])
