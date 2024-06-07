@@ -1,5 +1,5 @@
-import { Student } from 'src/students/student.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Student } from 'src/students/student.entity';
 
 @Entity()
 export class Attestation {
@@ -7,13 +7,25 @@ export class Attestation {
   id: number;
 
   @Column()
-  purpose: string;
+  studentName: string;
 
   @Column()
-  registrationNumber: string;
+  universityYear: string;
 
-  @Column({ type: 'date' })
-  date: Date;
+  @Column()
+  studyYear: string;
+
+  @Column()
+  studyProgram: string;
+
+  @Column()
+  studyForm: string;
+
+  @Column()
+  feeStatus: string;
+
+  @Column()
+  purpose: string;
 
   @ManyToOne(() => Student, (Student) => Student.attestations)
   soliciters: Student;
