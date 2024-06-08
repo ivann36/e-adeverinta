@@ -1,4 +1,4 @@
-import { Attestation } from 'src/attestation/attestation.entity';
+import { Attestation } from '../attestation/attestation.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
