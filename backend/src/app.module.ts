@@ -11,28 +11,15 @@ import { GoogleAuthModule } from './google-auth/google-auth.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { SecretaryModule } from './secretary/secretary.module';
-import { DataSource } from 'typeorm';
+import { FacultyModule } from './faculty/faculty.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'sqlite',
-        database: 'db/sql.sqlite',
-        synchronize: true,
-        autoLoadEntities: true,
-        seeds: [],
-      }),
-
-      // Use useFactory, useClass, or useExisting
-      // to configure the DataSourceOptions.
-      //
-      dataSourceFactory: async (options) => {
-        const dataSource = await new DataSource(options).initialize();
-        return dataSource;
-      },
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'db/sql.sqlite',
+      synchronize: true,
+      autoLoadEntities: true,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -46,8 +33,9 @@ import { DataSource } from 'typeorm';
     AdminModule,
     AuthModule,
     SecretaryModule,
+    FacultyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

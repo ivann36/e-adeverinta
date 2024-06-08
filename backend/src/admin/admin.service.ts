@@ -33,4 +33,8 @@ export class AdminService {
     const admin = await this.adminRepository.findOneBy({ name: username });
     return admin.refreshToken;
   }
+
+  create(data: { name: string; password: string }) {
+    return this.adminRepository.save(data);
+  }
 }
