@@ -9,7 +9,7 @@ export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
-  ) {}
+  ) { }
 
   findByName(name: string) {
     return this.adminRepository.findOneBy({ name: name });
@@ -34,7 +34,7 @@ export class AdminService {
     return admin.refreshToken;
   }
 
-  create(data: { name: string; password: string }) {
+  create(data: { id?: number, name: string; password: string }) {
     return this.adminRepository.save(data);
   }
 }

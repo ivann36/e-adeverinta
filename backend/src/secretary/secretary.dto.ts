@@ -1,4 +1,6 @@
 export class SecretaryDto {
+  id?: number;
+
   name?: string;
 
   surname?: string;
