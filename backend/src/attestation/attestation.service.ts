@@ -3,9 +3,9 @@ import { Attestation } from './attestation.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AttestationDto } from './attestation.dto';
-import { StudentService } from 'src/students/student.service';
-import { Student } from 'src/students/student.entity';
-import { constants } from 'src/constants';
+import { StudentService } from '../students/student.service';
+import { Student } from '../students/student.entity';
+import { constants } from '../constants';
 
 @Injectable()
 export class AttestationService {

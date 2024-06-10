@@ -12,5 +12,5 @@ export class Admin {
   password: string;
 
   @Column({ nullable: true })
-  refreshToken: string;
+  refreshToken?: string;
 }
