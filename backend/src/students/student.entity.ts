@@ -36,6 +36,6 @@ export class Student {
   @Column({ type: 'character' })
   gender: string;
 
-  @OneToMany(() => Attestation, (attestation) => attestation.soliciters)
+  @OneToMany(() => Attestation, (attestation) => attestation.soliciter)
   attestations: Attestation[];
 }
