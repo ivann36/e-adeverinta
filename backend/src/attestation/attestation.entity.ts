@@ -9,12 +9,18 @@ export class Attestation {
   @Column()
   purpose: string;
 
-  @Column()
+  @Column({ nullable: true })
   registrationNumber: string;
 
   @Column({ type: 'date' })
   date: Date;
 
+  @Column({ nullable: true })
+  isApproved: boolean;
+
+  @Column()
+  status: string;
+
   @ManyToOne(() => Student, (Student) => Student.attestations)
-  soliciters: Student;
+  soliciter: Student;
 }
