@@ -50,7 +50,7 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('signIn', async () => {
+  describe('signIn', () => {
     it('should return a JWT when credentials are valid', async () => {
       const result = {
         'access_token': 'testToken',
@@ -63,7 +63,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('refreshToken', async () => {
+  describe('refreshToken', () => {
     it('should return a new access token', async () => {
       const result = {
         'access_token': 'testToken',
