@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Admin } from './admin.entity';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { AdminFileService } from './admin-file.service';
 import { StudentModule } from 'src/students/student.module';
 
 @Module({
@@ -11,8 +10,8 @@ import { StudentModule } from 'src/students/student.module';
     TypeOrmModule.forFeature([Admin]),
     StudentModule,
   ],
-  providers: [AdminService, AdminFileService],
-  exports: [AdminService, AdminFileService],
+  providers: [AdminService],
+  exports: [AdminService],
   controllers: [AdminController],
 })
 export class AdminModule { }
