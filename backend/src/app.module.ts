@@ -13,6 +13,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { SecretaryModule } from './secretary/secretary.module';
 import { FacultyModule } from './faculty/faculty.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { FacultyModule } from './faculty/faculty.module';
     AuthModule,
     SecretaryModule,
     FacultyModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
