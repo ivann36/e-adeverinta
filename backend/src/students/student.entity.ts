@@ -31,7 +31,7 @@ export class Student {
   studyYear: number;
 
   @Column()
-  financiation: number;
+  financiation: string;
 
   @Column({ type: 'character' })
   gender: string;

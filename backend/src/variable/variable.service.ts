@@ -33,4 +33,8 @@ export class VariableService {
     variable.value = num;
     await this.variableRepository.save(variable);
   }
+
+  async createVariable(variable: Partial<Variable>): Promise<Variable> {
+    return await this.variableRepository.save(variable);
+  }
 }

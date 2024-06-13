@@ -27,7 +27,6 @@ export const Header = () => {
       <Link href="/"><h1 className={styles.title}>e-adeverinte</h1></Link>
       <nav className={styles.nav}>
         <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
         {
 
           isLoggedIn ?

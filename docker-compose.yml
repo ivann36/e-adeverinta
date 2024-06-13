@@ -1,0 +1,22 @@
+version: '3'
+services:
+  backend:
+    image: docker.io/library/node:21
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: bash -c "npm install && npm audit fix && npm run build && npm run seed && npm run start:prod"
+    ports:
+      - 3000:3000
+    env_file:
+      - ../env/.env
+  frontend:
+    image: docker.io/library/node:21
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: bash -c "npm install && npm audit fix && npx next start --port 3001"
+    ports:
+      - 3001:3001
+    env_file:
+      - ./frontend/.env.local

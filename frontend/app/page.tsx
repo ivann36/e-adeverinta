@@ -1,95 +1,49 @@
-import Image from "next/image";
+'use client'
 import styles from "./page.module.css";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { jwtFetch } from "./utils/jwtFetch";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  const [role, setRole] = useState<string | null>();
+  useEffect(() => {
+    setRole(localStorage.getItem("role"));
+  }, []);
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+  const fetchNewEntries = async () => {
+    const response = await jwtFetch({ url: "/api/google-sheets", method: "GET" });
+    if (response.ok) {
+      const entries = await response.json();
+      console.log(entries);
+    } else {
+      console.log("Error fetching new entries");
+    }
+  }
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+  if (role === "admin") {
+    return (
+      <main className={styles.main}>
+        <h1>Admin page</h1>
+        <Link className={styles.button} href={'/faculty'}>Faculty</Link>
+        <Link className={styles.button} href={'/secretary'}>Secretary</Link>
+        <Link className={styles.button} href={'/upload/students'}>Upload</Link>
+      </main>
+    );
+  } else if (role === "secretary") {
+    return (
+      <main className={styles.main}>
+        <h1>Secretary page</h1>
+        <Link className={styles.button} href={'/attestation'}>Attestations</Link>
+        <Link className={styles.button} href={'/students'}>Students</Link>
+        <button className={styles.button} onClick={fetchNewEntries}>Fetch new entries</button>
+      </main>
+    );
+  } else {
+    return (
+      <main className={styles.main}>
+        <h1>Please Log in</h1>
+        <p>To use application log in!</p>
+      </main>
+    )
+  }
 }

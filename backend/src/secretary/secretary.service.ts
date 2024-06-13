@@ -32,6 +32,22 @@ export class SecretaryService {
     }
   }
 
+  async getById(id: number): Promise<SecretaryDto> {
+    try {
+      const secretary = await this.secretaryRepository.findOneBy({ id: id });
+      return {
+        id: secretary.id,
+        email: secretary.email,
+        name: secretary.name,
+        surname: secretary.surname,
+        title: secretary.title,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('Cannot find secretary');
+    }
+  }
+
   async getList(): Promise<SecretaryDto[]> {
     try {
       const secretary = await this.secretaryRepository.find();

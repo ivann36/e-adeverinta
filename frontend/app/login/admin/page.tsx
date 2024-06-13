@@ -28,6 +28,7 @@ const LoginPage = () => {
       const tokens = await response.json()
       localStorage.setItem('access_token', tokens.access_token)
       localStorage.setItem('refresh_token', tokens.refresh_token)
+      localStorage.setItem('role', 'admin')
       logIn()
       router.push('/')
     } else {

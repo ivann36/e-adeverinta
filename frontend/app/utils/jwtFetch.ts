@@ -29,13 +29,15 @@ export async function jwtFetch(
     callbackLogin,
     callbackRefreshToken = refreshToken,
     body,
+    headers,
   }:
     {
       url: string,
       method: string,
       callbackLogin?: Function,
       callbackRefreshToken?: Function,
-      body?: Object
+      body?: Object,
+      headers?: Object
     }
 ): Promise<Response> {
   const token = localStorage.getItem("access_token");
@@ -47,20 +49,32 @@ export async function jwtFetch(
   }
   let res;
   if (body) {
-    res = await fetch(url, {
-      method: method,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
+    if (body instanceof FormData) {
+      res = await fetch(url, {
+        method: method,
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: body instanceof FormData ? body : JSON.stringify(body),
+      });
+    }else{
+      res = await fetch(url, {
+        method: method,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+    }
+
   } else {
     res = await fetch(url, {
       method: method,
       headers: {
-        Accept: "application/json",
+        // Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
     });

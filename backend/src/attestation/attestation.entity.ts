@@ -15,9 +15,6 @@ export class Attestation {
   @Column({ type: 'date' })
   date: Date;
 
-  @Column({ nullable: true })
-  isApproved: boolean;
-
   @Column()
   status: string;
 

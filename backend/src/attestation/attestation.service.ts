@@ -18,62 +18,57 @@ export class AttestationService {
 
   async addNewEntries(attestations: Array<AttestationDto>) {
     attestations.forEach(async (attestation) => {
+      await this.addNewEntry(attestation);
+
+    });
+  }
+
+  async addNewEntry(attestation: AttestationDto) {
+    try{
       const student: Student = await this.studentService.getStudentById(attestation.soliciter);
       const newAttestation = new Attestation();
       newAttestation.purpose = attestation.purpose;
       newAttestation.registrationNumber = attestation.registrationNumber;
       newAttestation.date = attestation.date;
       newAttestation.soliciter = student;
-
-      this.attestationRepository.save(newAttestation);
-    });
+      newAttestation.status = constants.unapproved;
+      console.log(await this.attestationRepository.save(newAttestation));
+    }catch(err){
+      console.log(err);
+    }
   }
 
-  async addNewEntry(attestation: AttestationDto) {
-    const student: Student = await this.studentService.getStudentById(attestation.soliciter);
-    const newAttestation = new Attestation();
-    newAttestation.purpose = attestation.purpose;
-    newAttestation.registrationNumber = attestation.registrationNumber;
-    newAttestation.date = attestation.date;
-    newAttestation.soliciter = student;
-    this.attestationRepository.save(newAttestation);
+  async listAll() {
+    const res = await this.attestationRepository.find()
+    console.log(res);
+    return await this.attestationRepository.find();
   }
 
-  listAll() {
-    return this.attestationRepository.find();
+  async listApproved() {
+    return await this.attestationRepository.findBy({ status: constants.approved });
   }
 
-  listApproved() {
-    return this.attestationRepository.findBy({ status: constants.approved });
+  async listUnapproved() {
+    return await this.attestationRepository.findBy({ status: constants.unapproved });
   }
 
-  listUnapproved() {
-    return this.attestationRepository.findBy({ status: constants.unapproved });
-  }
-
-  listRejected() {
-    return this.attestationRepository.findBy({ status: constants.rejected });
+  async listRejected() {
+    return await this.attestationRepository.findBy({ status: constants.rejected });
   }
 
   async approve(id: number) {
-    const attestation = await this.attestationRepository.findOneBy({ id: id });
-    attestation.isApproved = true;
-    this.attestationRepository.update(id, { status: constants.approved });
+    await this.attestationRepository.update(id, { status: constants.approved });
   }
 
   async unapprove(id: number) {
-    const attestation = await this.attestationRepository.findOneBy({ id: id });
-    attestation.isApproved = false;
-    this.attestationRepository.update(id, { status: constants.unapproved });
+    await this.attestationRepository.update(id, { status: constants.unapproved });
   }
 
   async reject(id: number) {
-    const attestation = await this.attestationRepository.findOneBy({ id: id });
-    attestation.isApproved = false;
-    this.attestationRepository.update(id, { status: constants.rejected });
+    await this.attestationRepository.update(id, { status: constants.rejected });
   }
 
-  findOne(id: number) {
-    return this.attestationRepository.findOneBy({ id: id });
+  async findOne(id: number) {
+    return await this.attestationRepository.findOneBy({ id: id });
   }
 }

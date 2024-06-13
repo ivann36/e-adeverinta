@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.module.css';
 import { Attestation } from '../entities/attestation';
+import { jwtFetch } from '../utils/jwtFetch';
 
 const Attestations: React.FC = () => {
     const [attestations, setAttestations] = useState<Attestation[]>([]);
@@ -17,27 +18,30 @@ const Attestations: React.FC = () => {
             url += `/${filter}`;
         }
 
-        const response = await fetch(url);
+        // const response = await fetch(url);
+        const response = await jwtFetch({ url: url, method: 'GET'});
         const data = await response.json();
         setAttestations(data);
     };
 
     const approve = async (id: number) => {
-        const response = await fetch(`/api/attestation/approve/${id}`, { method: 'PATCH' })
+        const response = await jwtFetch({ url: `/api/attestation/approve/${id}`, method: 'PATCH' });
         if (response.ok) {
             await fetchAttestations();
         }
     }
 
     const unapprove = async (id: number) => {
-        const response = await fetch(`/api/attestation/unaprove/${id}`, { method: 'PATCH' })
+        // const response = await fetch(`/api/attestation/unaprove/${id}`, { method: 'PATCH' })
+        const response = await jwtFetch({ url: `/api/attestation/unaprove/${id}`, method: 'PATCH' });
         if (response.ok) {
             await fetchAttestations();
         }
     }
 
     const reject = async (id: number) => {
-        const response = await fetch(`/api/attestation/reject/${id}`, { method: 'PATCH' })
+        // const response = await fetch(`/api/attestation/reject/${id}`, { method: 'PATCH' })
+        const response = await jwtFetch({ url: `/api/attestation/reject/${id}`, method: 'PATCH' });
         if (response.ok) {
             await fetchAttestations();
         }
@@ -62,7 +66,7 @@ const Attestations: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {attestations.map((attestation) => (
+                    {attestations.length && attestations.map((attestation) => (
                         <tr key={attestation.id}>
                             <td>{attestation.purpose}</td>
                             <td>{attestation.status}</td>

@@ -1,6 +1,7 @@
 "use client"
 import React, { FormEvent, useEffect, useState } from 'react';
 import styles from './styles.module.css';
+import { jwtFetch } from '../utils/jwtFetch';
 
 const FacultyPage = () => {
     const [id, setId] = useState(0);
@@ -12,7 +13,7 @@ const FacultyPage = () => {
 
     useEffect(() => {
         // Fetch the faculty information
-        fetch('/api/faculty')
+        jwtFetch({ url: '/api/faculty', method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 setFullName(data.fullName);
@@ -31,18 +32,15 @@ const FacultyPage = () => {
     const handleEdit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Call the API to edit the faculty information
-        fetch('/api/faculty/' + id.toString(), {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+
+        jwtFetch({
+            url: '/api/faculty/' + id.toString(), method: 'PUT', body: {
                 fullName,
                 shortName,
                 currentAcademicYear,
                 deanName,
                 chiefSecretaryName,
-            }),
+            },
         })
             .then(response => {
                 if (response.ok) {

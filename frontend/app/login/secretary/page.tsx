@@ -1,5 +1,5 @@
-'use client'
-import { useParams, redirect, useSearchParams } from "next/navigation"
+'use client';
+import { redirect, useSearchParams } from "next/navigation"
 import { useEffect } from "react";
 
 const LoginPage = () => {

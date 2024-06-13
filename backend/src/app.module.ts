@@ -6,7 +6,7 @@ import { StudentModule } from './students/student.module';
 import { AttestationModule } from './attestation/attestation.module';
 import { VariableModule } from './variable/variable.module';
 // leaking memory https://github.com/googleapis/google-api-nodejs-client/issues/2187
-// import { GoogleSheetsModule } from './google-sheets/google-sheets.module';
+import { GoogleSheetsModule } from './google-sheets/google-sheets.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GoogleAuthModule } from './google-auth/google-auth.module';
 import { AdminModule } from './admin/admin.module';
@@ -30,7 +30,7 @@ import { EmailModule } from './email/email.module';
     StudentModule,
     AttestationModule,
     VariableModule,
-    // GoogleSheetsModule,
+    GoogleSheetsModule,
     GoogleAuthModule,
     AdminModule,
     AuthModule,

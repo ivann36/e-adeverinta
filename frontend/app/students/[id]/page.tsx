@@ -85,7 +85,7 @@ const EditStudent: React.FC = () => {
       </label>
       <label className={styles.formLabel} >
         Financiation:
-        <input className={styles.formInput} type="number" value={student.financiation}
+        <input className={styles.formInput} type="text" value={student.financiation}
           onChange={e => setStudent({ ...student, financiation: e.target.value })} />
       </label>
       <button className={styles.submitButton} type="submit">Update</button>

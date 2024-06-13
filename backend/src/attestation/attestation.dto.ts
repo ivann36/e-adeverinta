@@ -5,5 +5,5 @@ export class AttestationDto {
     registrationNumber?: string;
     date: Date;
     soliciter: number;
-    isApproved: boolean;
+    status?: string;
 }

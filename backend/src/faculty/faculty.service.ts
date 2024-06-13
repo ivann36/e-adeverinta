@@ -32,7 +32,7 @@ export class FacultyService {
             if (newFacultyData.chiefSecretaryName) {
                 faculty.chiefSecretaryName = newFacultyData.chiefSecretaryName;
             }
-
+            console.log(newFacultyData, faculty);
             await this.facultyRepository.save(faculty);
         } catch (error) {
             console.log(error);
@@ -42,5 +42,21 @@ export class FacultyService {
 
     async getFaculty(id = 1) {
         return await this.facultyRepository.findOneBy({ id: id });
+    }
+
+    async createFaculty(facultyData: Partial<Faculty>) {
+        try {
+            let faculty: Faculty = new Faculty();
+            faculty.fullName = facultyData.fullName;
+            faculty.shortName = facultyData.shortName;
+            faculty.currentAcademicYear = facultyData.currentAcademicYear;
+            faculty.deanName = facultyData.deanName;
+            faculty.chiefSecretaryName = facultyData.chiefSecretaryName;
+
+            await this.facultyRepository.save(faculty);
+        } catch (error) {
+            console.log(error);
+            throw new BadRequestException('Invalid data of faculty');
+        }
     }
 }

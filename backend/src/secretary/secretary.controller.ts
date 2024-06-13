@@ -7,11 +7,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { SecretaryDto } from './secretary.dto';
 import { SecretaryService } from './secretary.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('secretary')
+@UseGuards(AuthGuard)
 export class SecretaryController {
   constructor(private secretaryService: SecretaryService) { }
 

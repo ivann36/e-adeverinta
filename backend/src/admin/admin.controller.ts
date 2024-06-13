@@ -1,9 +1,10 @@
-import { Controller, UploadedFile, UseInterceptors, Post, BadRequestException } from '@nestjs/common';
+import { Controller, UploadedFile, UseInterceptors, Post, BadRequestException, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { parse } from 'node-xlsx';
 import { StudentService } from '../students/student.service';
 import { StudentDto } from '../students/student.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('admin')
 export class AdminController {
@@ -13,10 +14,11 @@ export class AdminController {
     ) { }
 
     @Post('upload')
+    @UseGuards(AuthGuard)
     @UseInterceptors(FileInterceptor('file'))
     async uploadFileXlsx(@UploadedFile() file: Express.Multer.File) {
         // ToDo: Implement for csv files
-        console.log(file.mimetype);
+        console.log(file);
         const workSheets = parse(file.buffer);
         const data = workSheets[0].data as Array<Array<string>>;
         const keys = data.shift();

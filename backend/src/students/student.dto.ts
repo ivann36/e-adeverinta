@@ -34,8 +34,8 @@ export class StudentDto {
   studyYear: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  financiation: number;
+  @IsString()
+  financiation: string;
 
   @IsNotEmpty()
   @IsString()

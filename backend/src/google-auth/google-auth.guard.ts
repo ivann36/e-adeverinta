@@ -1,10 +1,14 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { SecretaryService } from 'src/secretary/secretary.service';
 
 @Injectable()
 export class GoogleAuthGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
+    constructor(
+        private jwtService: JwtService,
+        @Inject(SecretaryService) private secretaryService: SecretaryService,
+    ) { }
 
     canActivate(
         context: ExecutionContext,
@@ -12,12 +16,17 @@ export class GoogleAuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const token = request.headers.authorization?.split(' ')[1];
 
-        try {
-            const decoded = this.jwtService.verify(token);
-            request.user = decoded;
-            return true;
-        } catch (err) {
-            throw new UnauthorizedException('Invalid token');
-        }
+        const decoded = this.jwtService.verify(token);
+        request.user = decoded;
+        this.secretaryService.getById(decoded.sub).then((secretary) => {
+            if (!secretary) {
+                throw new UnauthorizedException('Invalid token');
+            }
+            console.log(secretary, decoded);
+            if (decoded.email !== secretary.email) {
+                throw new UnauthorizedException('Invalid token');
+            }
+        });
+        return true;
     }
 }

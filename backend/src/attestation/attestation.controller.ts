@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards } from '@nestjs/common';
 import { AttestationService } from './attestation.service';
 import { Attestation } from './attestation.entity';
 import { AttestationDto } from './attestation.dto';
 import { StudentService } from 'src/students/student.service';
 import { StudentDto } from 'src/students/student.dto';
+import { GoogleAuthGuard } from 'src/google-auth/google-auth.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('attestation')
+@UseGuards(GoogleAuthGuard)
 export class AttestationController {
     constructor(
         private readonly attestationService: AttestationService,
@@ -23,6 +26,7 @@ export class AttestationController {
 
     @Get()
     async listAll() {
+        console.log('listAll')
         return await this.attestationService.listAll();
     }
 
